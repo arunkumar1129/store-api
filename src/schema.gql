@@ -1,0 +1,113 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Address {
+  addresLine1: String!
+  city: String!
+  country: String!
+  label: String!
+  state: String!
+  street: String!
+  zip: String!
+}
+
+type Contact {
+  addresses: [Address!]!
+  email: String!
+}
+
+input CreateProductInput {
+  description: String!
+  discount: Float
+  images: [String!]!
+  originalPrice: Int!
+  sellerId: String!
+  title: String!
+}
+
+input CreateUserInput {
+  contact: contact
+  mobile: String!
+  name: name!
+  role: String!
+}
+
+type Mutation {
+  createProduct(createProductInput: CreateProductInput!): Product!
+  createUser(createUserInput: CreateUserInput!): User!
+  removeProduct(id: String!): Product!
+  removeUser(id: String!): User!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Name {
+  first: String!
+  last: String!
+}
+
+type Product {
+  _id: String!
+  description: String!
+  discount: Float!
+  images: [String!]!
+  originalPrice: Int!
+  price: Int!
+  seller: User
+  sellerId: String!
+  title: String!
+}
+
+type Query {
+  product(id: String!): Product!
+  products: [Product!]!
+  user(id: String!): User!
+  users: [User!]!
+}
+
+input UpdateProductInput {
+  _id: String!
+  description: String
+  discount: Float
+  images: [String!]
+  originalPrice: Int
+  sellerId: String
+  title: String
+}
+
+input UpdateUserInput {
+  _id: String!
+  contact: contact
+  mobile: String
+  name: name
+  role: String
+}
+
+type User {
+  _id: String!
+  contact: Contact!
+  mobile: String!
+  name: Name!
+  products: [Product!]
+  role: String!
+}
+
+input address {
+  addresLine1: String!
+  city: String!
+  label: String!
+  state: String!
+  street: String!
+  zip: String!
+}
+
+input contact {
+  addresses: [address!]! = []
+  email: String!
+}
+
+input name {
+  first: String!
+  last: String!
+}
