@@ -1,5 +1,16 @@
 import { InputType, Int, Field, Float } from '@nestjs/graphql';
-import { IsArray, IsMongoId, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsArray, IsMongoId, IsNotEmpty, IsNumber, IsObject, IsOptional } from 'class-validator';
+
+@InputType('images')
+export class Images {
+  @IsNotEmpty()
+  @Field()
+  default: string;
+
+  @IsArray()
+  @Field(() => [String], { nullable: true })
+  optional: string[];
+}
 
 @InputType()
 export class CreateProductInput {
@@ -12,9 +23,9 @@ export class CreateProductInput {
   description: string;
 
   @IsOptional()
-  @IsArray()
-  @Field(() => [String])
-  images: string[];
+  @IsObject()
+  @Field(() => Images)
+  images: Images;
 
   @IsNumber()
   @IsNotEmpty()

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Param, Delete, UseInterceptors, UploadedFiles, Res } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { multerOptions } from './file-utils';
+import { getFilePath, multerOptions } from './file-utils';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { Response } from 'express';
@@ -13,17 +13,22 @@ export class FilesController {
     { name: 'optional', maxCount: 4 },
   ], multerOptions))
   uploadFile(@UploadedFiles() files: { default?: Express.Multer.File[], optional?: Array<Express.Multer.File> }) {
-    return files;
+    const defaultImage = getFilePath(files.default[0].filename);
+    const optionalImages = files.optional?.map(file => getFilePath(file.filename)) || [];
+    return {
+      default: defaultImage,
+      optional: optionalImages,
+    };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string, @Res() res: Response) {
-    const file = createReadStream(join(process.cwd(), 'uploads', id));
+  @Get(':filename')
+  findOne(@Param('filename') filename: string, @Res() res: Response) {
+    const file = createReadStream(join(process.cwd(), 'uploads', filename));
     return file.pipe(res);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    //return this.filesService.remove(+id);
+  @Delete(':filename')
+  remove(@Param('filename') filename: string) {
+    //return this.filesService.remove(filename);
   }
 }

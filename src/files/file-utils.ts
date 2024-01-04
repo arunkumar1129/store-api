@@ -1,4 +1,4 @@
-import path, { extname } from 'path';
+import { extname } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import { diskStorage } from 'multer';
 import { v4 as uuid } from 'uuid';
@@ -39,8 +39,17 @@ export const multerOptions = {
         // File modification details
         filename: (req: any, file: any, cb: any) => {
             // Calling the callback passing the random name generated with the original extension name
-            const filename = path.parse(file.originalname).name.replace(/\s/g, '') + uuid();
+            const filename = file.originalname?.split('.')[0].replace(/\s/g, '') + uuid();
             cb(null, `${filename}${extname(file.originalname)}`);
         },
     }),
 };
+
+/**
+ * Get the full file path for a given filename.
+ * @param filename - The name of the file.
+ * @returns The full file path.
+ */
+export function getFilePath(filename: string) {
+    return ['http://localhost:3000', 'files', filename].join('/');
+}

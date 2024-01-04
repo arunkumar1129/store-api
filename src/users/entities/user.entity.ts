@@ -1,7 +1,8 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { Product } from 'src/products/entities/product.entity';
+import { Role } from 'src/shared/role.enum';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -79,9 +80,9 @@ export class User {
   @Field(() => Contact)
   contact: Contact
 
-  @Prop({ required: true })
-  @Field()
-  role: string;
+  @Prop({ default: Role.BUYER, enum: Role })
+  @Field(() => Role, { defaultValue: Role.BUYER, nullable: true })
+  role: Role;
 
   @Prop({ type: Array<Product>, default: [] })
   @Field(() => [Product], { defaultValue: [], nullable: true })

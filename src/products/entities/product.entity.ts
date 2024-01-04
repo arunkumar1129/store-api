@@ -6,6 +6,18 @@ import { User } from 'src/users/entities/user.entity';
 
 export type ProductDocument = HydratedDocument<Product>;
 
+@Schema({ timestamps: false, versionKey: false, _id: false })
+@ObjectType()
+export class Images {
+  @Prop({ required: true })
+  @Field(() => String)
+  default: string;
+
+  @Prop({ required: true, type: [String] })
+  @Field(() => [String], { nullable: true })
+  optional: string[];
+}
+
 @Schema({ timestamps: true, versionKey: false })
 @ObjectType()
 export class Product {
@@ -20,9 +32,9 @@ export class Product {
   @Field()
   description: string;
 
-  @Prop({ type: [String], required: true })
-  @Field(() => [String])
-  images: string[];
+  @Prop({ type: Images, required: true })
+  @Field(() => Images)
+  images: Images;
 
   @Prop()
   @Field(() => Int)
@@ -44,5 +56,6 @@ export class Product {
   @Field(() => User, { nullable: true })
   seller: User;
 }
+
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
